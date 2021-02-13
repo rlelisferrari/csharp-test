@@ -7,21 +7,21 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrdersController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly AppDbContext context;
-        private readonly IOrderRepository orderRepository;
+        private readonly IUserRepository userRepository;
 
-        public OrdersController(AppDbContext context, IOrderRepository orderRepository)
+        public UsersController(AppDbContext context, IUserRepository userRepository)
         {
             this.context = context;
-            this.orderRepository = orderRepository;
+            this.userRepository = userRepository;
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            return Ok(this.orderRepository.GetAll());
+            return Ok(this.userRepository.GetAll());
         }
     }
 }

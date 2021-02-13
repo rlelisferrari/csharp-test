@@ -1,4 +1,7 @@
 using DATA.Contexts;
+using DATA.Repositories;
+using DOMAIN.Interfaces.Repositories;
+using DOMAIN.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +24,14 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
+            services.AddScoped(typeof(IProductRepository), typeof(ProductRepository));
+            services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
+
+            services.AddScoped<UserService>();
+            services.AddScoped<ProductService>();
+            services.AddScoped<OrderService>();
 
             services.AddDbContext<AppDbContext>(
                 options =>
