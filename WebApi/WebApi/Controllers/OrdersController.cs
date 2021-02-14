@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DATA.Contexts;
 using DOMAIN.Interfaces.Repositories;
+using DOMAIN.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -22,6 +24,29 @@ namespace WebApi.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             return Ok(this.orderRepository.GetAll());
+        }
+
+        [HttpPost]
+        public ActionResult Post(int userId, List<int> productIds)
+        {
+            try
+            {
+                //Adicionar validação de ordem já cadastrada, produto e usuario não cadastrado
+
+                foreach (var productId in productIds)
+                {
+                    var order = new Order();
+                    order.UserId = userId;
+                    order.ProductId = productId;
+                    this.orderRepository.Add(order);
+                }
+
+                return Ok("Order successfully registered");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }

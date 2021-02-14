@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DATA.Contexts;
 using DOMAIN.Interfaces.Repositories;
+using DOMAIN.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -22,6 +24,24 @@ namespace WebApi.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             return Ok(this.productRepository.GetAll());
+        }
+
+        [HttpPost]
+        public ActionResult Post([FromBody] Product product)
+        {
+            try
+            {
+                if (product == null)
+                    return NotFound();
+                product.CreationDate = DateTime.Now;
+                this.productRepository.Add(product);
+                return Ok("Product successfully registered");
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }

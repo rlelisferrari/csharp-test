@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DATA.Contexts;
 using DOMAIN.Interfaces.Repositories;
+using DOMAIN.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
@@ -22,6 +24,24 @@ namespace WebApi.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             return Ok(this.userRepository.GetAll());
+        }
+
+        [HttpPost("singup")]
+        public ActionResult Post([FromBody] User user)
+        {
+            try
+            {
+                if (user == null)
+                    return NotFound();
+                user.RegistrationDate = DateTime.Now;
+                this.userRepository.Add(user);
+                return Ok("User successfully registered");
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
     }
 }
