@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using DATA.Contexts;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
@@ -22,7 +21,11 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get([FromQuery] string name, string description, DateTime initial, DateTime final)
+        public ActionResult<IEnumerable<string>> Get(
+            [FromQuery] string name,
+            string description,
+            DateTime initial,
+            DateTime final)
         {
             return Ok(
                 this.productRepository.FindAll(
@@ -47,7 +50,6 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
@@ -60,9 +62,11 @@ namespace WebApi.Controllers
             if (product == null)
                 return NotFound();
 
-            product.Name = productChanged.Name;
-            product.Description = productChanged.Description;
-            product.Price = productChanged.Price;
+            product.Name = string.IsNullOrEmpty(productChanged.Name) ? product.Name : productChanged.Name;
+            product.Description = string.IsNullOrEmpty(productChanged.Description)
+                ? product.Description
+                : productChanged.Description;
+            product.Price = productChanged.Price <= 0 ? product.Price : productChanged.Price;
 
             this.productRepository.Update(product, product.Id);
 
