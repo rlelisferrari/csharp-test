@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DATA.Repositories;
 
 namespace DOMAIN.Models
 {
@@ -9,6 +10,6 @@ namespace DOMAIN.Models
         public string Description { get; set; }
         public float Price { get; set; }
         public DateTime CreationDate { get; set; }
-        public ICollection<Order> Orders { get; set; }
+        public ICollection<OrderContainsProduct> OrderContainsProducts { get; set; }
     }
 }

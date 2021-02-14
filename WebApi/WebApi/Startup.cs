@@ -29,10 +29,12 @@ namespace WebApi
             services.AddScoped(typeof(IUserRepository), typeof(UserRepository));
             services.AddScoped(typeof(IProductRepository), typeof(ProductRepository));
             services.AddScoped(typeof(IOrderRepository), typeof(OrderRepository));
+            services.AddScoped(typeof(IOrderContainsProductRepository), typeof(OrderContainsProductRepository));
 
             services.AddScoped<UserService>();
             services.AddScoped<ProductService>();
             services.AddScoped<OrderService>();
+            services.AddScoped<OrderContainsProductService>();
 
             services.AddDbContext<AppDbContext>(
                 options =>

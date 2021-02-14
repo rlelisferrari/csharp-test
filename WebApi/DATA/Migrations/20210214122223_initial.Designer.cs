@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DATA.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210213185652_remove_Id_in_Order")]
-    partial class remove_Id_in_Order
+    [Migration("20210214122223_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,15 +21,40 @@ namespace DATA.Migrations
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("DOMAIN.Models.Order", b =>
+            modelBuilder.Entity("DATA.Repositories.OrderContainsProduct", b =>
                 {
-                    b.Property<int>("UserId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("UserId", "ProductId");
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("OrderContainsProducts");
+                });
+
+            modelBuilder.Entity("DOMAIN.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -85,28 +110,42 @@ namespace DATA.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DOMAIN.Models.Order", b =>
+            modelBuilder.Entity("DATA.Repositories.OrderContainsProduct", b =>
                 {
-                    b.HasOne("DOMAIN.Models.Product", "Product")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
+                    b.HasOne("DOMAIN.Models.Order", "Order")
+                        .WithMany("OrderContainsProducts")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DOMAIN.Models.User", "User")
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId")
+                    b.HasOne("DOMAIN.Models.Product", "Product")
+                        .WithMany("OrderContainsProducts")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Order");
 
                     b.Navigation("Product");
+                });
 
-                    b.Navigation("User");
+            modelBuilder.Entity("DOMAIN.Models.Order", b =>
+                {
+                    b.HasOne("DOMAIN.Models.User", null)
+                        .WithMany("Orders")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DOMAIN.Models.Order", b =>
+                {
+                    b.Navigation("OrderContainsProducts");
                 });
 
             modelBuilder.Entity("DOMAIN.Models.Product", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("OrderContainsProducts");
                 });
 
             modelBuilder.Entity("DOMAIN.Models.User", b =>

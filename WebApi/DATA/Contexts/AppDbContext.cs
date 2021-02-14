@@ -1,4 +1,5 @@
-﻿using DOMAIN.Models;
+﻿using DATA.Repositories;
+using DOMAIN.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DATA.Contexts
@@ -13,22 +14,23 @@ namespace DATA.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Order>()
-                .HasKey(bc => new {bc.UserId, bc.ProductId});
+            modelBuilder.Entity<OrderContainsProduct>()
+                .HasKey(ocp => new {ocp.OrderId, ocp.ProductId});
 
-            modelBuilder.Entity<Order>()
-                .HasOne(order => order.User)
-                .WithMany(user => user.Orders)
-                .HasForeignKey(order => order.UserId);
+            modelBuilder.Entity<OrderContainsProduct>()
+                .HasOne(ocp => ocp.Order)
+                .WithMany(order => order.OrderContainsProducts)
+                .HasForeignKey(ocp => ocp.OrderId);
 
-            modelBuilder.Entity<Order>()
-                .HasOne(order => order.Product)
-                .WithMany(product => product.Orders)
-                .HasForeignKey(order => order.UserId);
+            modelBuilder.Entity<OrderContainsProduct>()
+                .HasOne(ocp => ocp.Product)
+                .WithMany(product => product.OrderContainsProducts)
+                .HasForeignKey(ocp => ocp.ProductId);
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderContainsProduct> OrderContainsProducts { get; set; }
     }
 }
