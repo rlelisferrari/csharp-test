@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using DATA.Contexts;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
@@ -49,6 +50,23 @@ namespace WebApi.Controllers
 
                 throw ex;
             }
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult Put(int id, [FromBody] Product productChanged)
+        {
+            var product = this.productRepository.Get(id);
+
+            if (product == null)
+                return NotFound();
+
+            product.Name = productChanged.Name;
+            product.Description = productChanged.Description;
+            product.Price = productChanged.Price;
+
+            this.productRepository.Update(product, product.Id);
+
+            return Ok();
         }
     }
 }

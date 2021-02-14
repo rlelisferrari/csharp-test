@@ -34,8 +34,20 @@ namespace WebApi.Controllers
                                 && item.RegistrationDate <= final)));
         }
 
+        [HttpPost("singin")]
+        public ActionResult Singin(string userName, string password)
+        {
+            var user = this.userRepository.Find(item => item.UserName == userName && item.Password == password);
+            if (user != null)
+            {
+                return Ok(user);
+            }
+
+            return BadRequest("Username or password not exist");
+        }
+
         [HttpPost("singup")]
-        public ActionResult Post([FromBody] User user)
+        public ActionResult Singup([FromBody] User user)
         {
             try
             {
