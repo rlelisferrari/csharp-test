@@ -21,9 +21,16 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<string>> Get([FromQuery] string name, string description, DateTime initial, DateTime final)
         {
-            return Ok(this.productRepository.GetAll());
+            return Ok(
+                this.productRepository.FindAll(
+                    item => (name == null || item.Name.Contains(name))
+                            && (description == null || item.Description.Contains(description))
+                            && (initial == DateTime.MinValue
+                                || final == DateTime.MinValue
+                                || initial <= item.CreationDate
+                                && item.CreationDate <= final)));
         }
 
         [HttpPost]

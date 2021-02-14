@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DATA.Contexts;
 using DATA.Repositories;
 using DOMAIN.Interfaces.Repositories;
@@ -16,7 +17,10 @@ namespace WebApi.Controllers
         private readonly IOrderRepository orderRepository;
         private readonly IOrderContainsProductRepository orderContainsProductRepository;
 
-        public OrdersController(AppDbContext context, IOrderRepository orderRepository, IOrderContainsProductRepository orderContainsProductRepository)
+        public OrdersController(
+            AppDbContext context,
+            IOrderRepository orderRepository,
+            IOrderContainsProductRepository orderContainsProductRepository)
         {
             this.context = context;
             this.orderRepository = orderRepository;
@@ -30,20 +34,21 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(int userId, List<int> productIds)
+        public ActionResult Post(int userId, List<OrderContainsProduct> ocp)
         {
             try
             {
                 //Adicionar validação de ordem já cadastrada, produto e usuario não cadastrado
 
-                var order = new Order() { UserId = userId };
+                var cost = ocp.Sum(item => item.Quantity * item.Product.Price);
+                var order = new Order {UserId = userId, TotalAmount = cost};
                 this.orderRepository.Add(order);
-                foreach (var productId in productIds)
+                foreach (var item in ocp)
                 {
                     var orderContainsProduct = new OrderContainsProduct();
                     orderContainsProduct.OrderId = order.Id;
-                    orderContainsProduct.ProductId = productId;
-                    orderContainsProduct.Quantity = 1;
+                    orderContainsProduct.ProductId = item.ProductId;
+                    orderContainsProduct.Quantity = item.Quantity;
                     this.orderContainsProductRepository.Add(orderContainsProduct);
                 }
 

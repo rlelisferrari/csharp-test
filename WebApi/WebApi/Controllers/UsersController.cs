@@ -21,9 +21,17 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<string>> Get([FromQuery] string name, string userName, string email, DateTime initial, DateTime final)
         {
-            return Ok(this.userRepository.GetAll());
+            return Ok(
+                this.userRepository.FindAll(
+                    item => (userName == null || item.UserName == userName)
+                            && (name == null || item.Name.Contains(name))
+                            && (email == null || item.Email == email)
+                            && (initial == DateTime.MinValue
+                                || final == DateTime.MinValue
+                                || initial <= item.RegistrationDate
+                                && item.RegistrationDate <= final)));
         }
 
         [HttpPost("singup")]
@@ -39,7 +47,6 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
         }
