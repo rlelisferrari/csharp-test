@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using DATA.Contexts;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class ProductsController : ControllerBase
     {
-        private readonly AppDbContext context;
         private readonly IProductRepository productRepository;
 
-        public ProductsController(AppDbContext context, IProductRepository productRepository)
+        public ProductsController(IProductRepository productRepository)
         {
-            this.context = context;
             this.productRepository = productRepository;
         }
 

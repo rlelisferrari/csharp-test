@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DATA.Contexts;
 using DATA.Repositories;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class OrdersController : ControllerBase
     {
-        private readonly AppDbContext context;
         private readonly IOrderRepository orderRepository;
         private readonly IOrderContainsProductRepository orderContainsProductRepository;
 
         public OrdersController(
-            AppDbContext context,
             IOrderRepository orderRepository,
             IOrderContainsProductRepository orderContainsProductRepository)
         {
-            this.context = context;
             this.orderRepository = orderRepository;
             this.orderContainsProductRepository = orderContainsProductRepository;
         }
