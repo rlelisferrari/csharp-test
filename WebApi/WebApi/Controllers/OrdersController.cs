@@ -5,6 +5,7 @@ using DOMAIN.Models;
 using DOMAIN.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.AuxClasses;
 
 namespace WebApi.Controllers
 {
@@ -28,9 +29,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post(int userId, List<OrderContainsProduct> ocp)
+        public async Task<ActionResult> Post(int userId, OrderRequest orderRequest)
         {
-            await this.orderService.Add(userId, ocp);
+            await this.orderService.Add(userId, orderRequest);
             return Ok("Order successfully registered");
         }
     }

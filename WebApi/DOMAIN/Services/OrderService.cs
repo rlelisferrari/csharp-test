@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using DATA.Repositories;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
+using WebApi.AuxClasses;
 
 namespace DOMAIN.Services
 {
@@ -32,28 +33,28 @@ namespace DOMAIN.Services
             return await this.orderRepository.GetAllAsyn();
         }
 
-        public async Task Add(int userId, List<OrderContainsProduct> ocp)
+        public async Task Add(int userId, OrderRequest orderRequest)
         {
             var user = await this.userRepository.GetAsync(userId);
-            if(user == null)
+            if (user == null)
                 throw new InvalidOperationException($"User with Id={userId} not found");
 
-            foreach (var ocpItem in ocp)
+            foreach (var productRequest in orderRequest.ProductList)
             {
-                var product = await this.productRepository.GetAsync(ocpItem.ProductId);
+                var product = await this.productRepository.GetAsync(productRequest.ProductId);
                 if (product == null)
-                    throw new InvalidOperationException($"Product with Id={ocpItem.ProductId} not found");
+                    throw new InvalidOperationException($"Product with Id={productRequest.ProductId} not found");
             }
 
-            var cost = ocp.Sum(item => item.Quantity * item.Product.Price);
+            var cost = orderRequest.ProductList.Sum(item => item.Quantity * item.Price);
             var order = new Order {UserId = userId, TotalAmount = cost};
             await this.orderRepository.AddAsyn(order);
-            foreach (var item in ocp)
+            foreach (var productRequest in orderRequest.ProductList)
             {
                 var orderContainsProduct = new OrderContainsProduct();
                 orderContainsProduct.OrderId = order.Id;
-                orderContainsProduct.ProductId = item.ProductId;
-                orderContainsProduct.Quantity = item.Quantity;
+                orderContainsProduct.ProductId = productRequest.ProductId;
+                orderContainsProduct.Quantity = productRequest.Quantity;
                 await this.orderContainsProductRepository.AddAsyn(orderContainsProduct);
             }
         }
