@@ -38,7 +38,6 @@ namespace WebApi
             services.AddScoped<UserService>();
             services.AddScoped<ProductService>();
             services.AddScoped<OrderService>();
-            services.AddScoped<OrderContainsProductService>();
 
             services.AddDbContext<AppDbContext>(
                 options =>

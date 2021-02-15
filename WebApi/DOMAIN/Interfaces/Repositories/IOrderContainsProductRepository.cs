@@ -1,9 +1,11 @@
-﻿using DATA.Repositories;
-using DOMAIN.Interfaces.Repositories.Base;
+﻿using System.Threading.Tasks;
+using DATA.Repositories;
 
 namespace DOMAIN.Interfaces.Repositories
 {
-    public interface IOrderContainsProductRepository : IGenericRepository<OrderContainsProduct>
+    public interface IOrderContainsProductRepository
     {
+        Task<OrderContainsProduct> AddAsyn(OrderContainsProduct orderContainsProduct);
+        void Dispose();
     }
 }

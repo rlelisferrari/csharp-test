@@ -1,9 +1,8 @@
 ﻿using DOMAIN.Models;
-using DOMAIN.Models.Base;
 
 namespace DATA.Repositories
 {
-    public class OrderContainsProduct : Base
+    public class OrderContainsProduct
     {
         public int OrderId { get; set; }
         public Order Order { get; set; }
