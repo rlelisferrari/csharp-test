@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DOMAIN.Interfaces.Repositories;
+using System.Threading.Tasks;
+using DOMAIN.Models;
+using DOMAIN.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,30 +13,23 @@ namespace WebApi.Controllers
     [Authorize]
     public class UsersController : ControllerBase
     {
-        private readonly IUserRepository userRepository;
+        private readonly UserService userService;
 
-        public UsersController(IUserRepository userRepository)
+        public UsersController(UserService userService)
         {
-            this.userRepository = userRepository;
+            this.userService = userService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get(
-            [FromQuery] string name,
-            string userName,
+        public async Task<ActionResult<IEnumerable<User>>> Get(
+            [FromQuery] string userName,
+            string name,
             string email,
             DateTime initial,
             DateTime final)
         {
-            return Ok(
-                this.userRepository.FindAll(
-                    item => (userName == null || item.UserName == userName)
-                            && (name == null || item.Name.Contains(name))
-                            && (email == null || item.Email == email)
-                            && (initial == DateTime.MinValue
-                                || final == DateTime.MinValue
-                                || initial <= item.RegistrationDate
-                                && item.RegistrationDate <= final)));
+            var users = await this.userService.FindUsers(userName, name, email, initial, final);
+            return Ok(users);
         }
     }
 }

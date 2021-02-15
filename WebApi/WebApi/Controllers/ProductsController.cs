@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using DOMAIN.Interfaces.Repositories;
+using System.Threading.Tasks;
 using DOMAIN.Models;
+using DOMAIN.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,64 +13,36 @@ namespace WebApi.Controllers
     [Authorize]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductRepository productRepository;
+        private readonly ProductService productService;
 
-        public ProductsController(IProductRepository productRepository)
+        public ProductsController(ProductService productService)
         {
-            this.productRepository = productRepository;
+            this.productService = productService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get(
+        public async Task<ActionResult<IEnumerable<Product>>> Get(
             [FromQuery] string name,
             string description,
             DateTime initial,
             DateTime final)
         {
-            return Ok(
-                this.productRepository.FindAll(
-                    item => (name == null || item.Name.Contains(name))
-                            && (description == null || item.Description.Contains(description))
-                            && (initial == DateTime.MinValue
-                                || final == DateTime.MinValue
-                                || initial <= item.CreationDate
-                                && item.CreationDate <= final)));
+            var products = await this.productService.FindProducts(name, description, initial, final);
+            return Ok(products);
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] Product product)
+        public async Task<ActionResult> Post([FromBody] Product product)
         {
-            try
-            {
-                if (product == null)
-                    return NotFound();
-                product.CreationDate = DateTime.Now;
-                this.productRepository.Add(product);
-                return Ok("Product successfully registered");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await this.productService.Add(product);
+            return Ok("Product successfully registered");
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] Product productChanged)
+        public async Task<ActionResult<Product>> Put(int id, [FromBody] Product productChanged)
         {
-            var product = this.productRepository.Get(id);
-
-            if (product == null)
-                return NotFound();
-
-            product.Name = string.IsNullOrEmpty(productChanged.Name) ? product.Name : productChanged.Name;
-            product.Description = string.IsNullOrEmpty(productChanged.Description)
-                ? product.Description
-                : productChanged.Description;
-            product.Price = productChanged.Price <= 0 ? product.Price : productChanged.Price;
-
-            this.productRepository.Update(product, product.Id);
-
-            return Ok();
+            var product = await this.productService.UpdateProduct(id, productChanged);
+            return Ok(product);
         }
     }
 }

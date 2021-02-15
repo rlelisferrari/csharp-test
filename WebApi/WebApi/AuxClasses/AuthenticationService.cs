@@ -6,7 +6,7 @@ using DOMAIN.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
-namespace WebApi
+namespace WebApi.AuxClasses
 {
     public static class AuthenticationService
     {

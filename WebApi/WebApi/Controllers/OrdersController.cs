@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using DATA.Repositories;
-using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
+using DOMAIN.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,48 +13,25 @@ namespace WebApi.Controllers
     [Authorize]
     public class OrdersController : ControllerBase
     {
-        private readonly IOrderRepository orderRepository;
-        private readonly IOrderContainsProductRepository orderContainsProductRepository;
+        private readonly OrderService orderService;
 
-        public OrdersController(
-            IOrderRepository orderRepository,
-            IOrderContainsProductRepository orderContainsProductRepository)
+        public OrdersController(OrderService orderService)
         {
-            this.orderRepository = orderRepository;
-            this.orderContainsProductRepository = orderContainsProductRepository;
+            this.orderService = orderService;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public async Task<ActionResult<IEnumerable<Order>>> Get()
         {
-            return Ok(this.orderRepository.GetAll());
+            var orders = await this.orderService.GetAll();
+            return Ok(orders);
         }
 
         [HttpPost]
-        public ActionResult Post(int userId, List<OrderContainsProduct> ocp)
+        public async Task<ActionResult> Post(int userId, List<OrderContainsProduct> ocp)
         {
-            try
-            {
-                //Adicionar validação de ordem já cadastrada, produto e usuario não cadastrado
-
-                var cost = ocp.Sum(item => item.Quantity * item.Product.Price);
-                var order = new Order {UserId = userId, TotalAmount = cost};
-                this.orderRepository.Add(order);
-                foreach (var item in ocp)
-                {
-                    var orderContainsProduct = new OrderContainsProduct();
-                    orderContainsProduct.OrderId = order.Id;
-                    orderContainsProduct.ProductId = item.ProductId;
-                    orderContainsProduct.Quantity = item.Quantity;
-                    this.orderContainsProductRepository.Add(orderContainsProduct);
-                }
-
-                return Ok("Order successfully registered");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await this.orderService.Add(userId, ocp);
+            return Ok("Order successfully registered");
         }
     }
 }
