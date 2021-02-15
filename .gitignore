@@ -23,3 +23,5 @@ WebApi/WebApi/obj/Debug/netcoreapp3.1/WebApi.pdb
 WebApi/WebApi/obj/Debug/netcoreapp3.1/WebApi.RazorTargetAssemblyInfo.cache
 WebApi/WebApi/obj/Debug/netcoreapp3.1/staticwebassets/WebApi.StaticWebAssets.Manifest.cache
 WebApi/WebApi/obj/Debug/netcoreapp3.1/staticwebassets/WebApi.StaticWebAssets.xml
+WebApi/AutomatedUnitTest/obj/
+WebApi/AutomatedUnitTest/bin/Debug/
