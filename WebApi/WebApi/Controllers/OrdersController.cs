@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using DOMAIN.Models;
+using DOMAIN.ODTClasses;
 using DOMAIN.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.AuxClasses;
 
 namespace WebApi.Controllers
 {
@@ -21,7 +20,7 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Order>>> Get()
+        public async Task<ActionResult<IEnumerable<OrderResponse>>> Get()
         {
             var orders = await this.orderService.GetAll();
             return Ok(orders);

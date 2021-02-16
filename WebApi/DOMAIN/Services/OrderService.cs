@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DATA.Repositories;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
-using WebApi.AuxClasses;
+using DOMAIN.ODTClasses;
 
 namespace DOMAIN.Services
 {
@@ -28,9 +27,9 @@ namespace DOMAIN.Services
             this.productRepository = productRepository;
         }
 
-        public async Task<IEnumerable<Order>> GetAll()
+        public async Task<IEnumerable<OrderResponse>> GetAll()
         {
-            return await this.orderRepository.GetAllAsyn();
+            return await this.orderRepository.GetFullOrders();
         }
 
         public async Task Add(int userId, OrderRequest orderRequest)

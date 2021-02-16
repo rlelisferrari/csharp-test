@@ -1,7 +1,8 @@
-﻿namespace WebApi.AuxClasses
+﻿namespace DOMAIN.ODTClasses
 {
-    public class ProductRequest
+    public class ProductResponse
     {
+        public string ProductName { get; set; }
         public int ProductId { get; set; }
         public int Quantity { get; set; }
         public float Price { get; set; }

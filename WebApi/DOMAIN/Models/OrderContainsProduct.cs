@@ -1,6 +1,4 @@
-﻿using DOMAIN.Models;
-
-namespace DATA.Repositories
+﻿namespace DOMAIN.Models
 {
     public class OrderContainsProduct
     {

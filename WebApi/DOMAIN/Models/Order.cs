@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DATA.Repositories;
 
 namespace DOMAIN.Models
 {

@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using DATA.Repositories;
+using DOMAIN.Models;
 
 namespace DOMAIN.Interfaces.Repositories
 {

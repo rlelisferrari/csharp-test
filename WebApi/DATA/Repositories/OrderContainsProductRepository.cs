@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using DATA.Contexts;
 using DOMAIN.Interfaces.Repositories;
+using DOMAIN.Models;
 
 namespace DATA.Repositories
 {
