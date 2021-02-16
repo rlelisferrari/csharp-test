@@ -25,3 +25,6 @@ WebApi/WebApi/obj/Debug/netcoreapp3.1/staticwebassets/WebApi.StaticWebAssets.Man
 WebApi/WebApi/obj/Debug/netcoreapp3.1/staticwebassets/WebApi.StaticWebAssets.xml
 WebApi/AutomatedUnitTest/obj/
 WebApi/AutomatedUnitTest/bin/Debug/
+WebApi/AutomatedUnitTest/bin/Release/
+WebApi/WebApi/obj/Debug/
+WebApi/WebApi/obj/
