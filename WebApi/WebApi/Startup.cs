@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using DATA.Contexts;
 using DATA.Repositories;
@@ -77,6 +79,11 @@ namespace WebApi
                 c =>
                 {
                     c.SwaggerDoc("v1", new OpenApiInfo {Title = "API Model DDD", Version = "v1"});
+
+                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                    c.IncludeXmlComments(xmlPath);
+
                     var jwtSecurityScheme = new OpenApiSecurityScheme
                     {
                         Scheme = "bearer",

@@ -20,7 +20,12 @@ namespace WebApi.Controllers
             this.userService = userService;
         }
 
+        /// <summary>
+        /// return list of users
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
+        [ProducesResponseType(typeof(List<User>), 200)]
         public async Task<ActionResult<IEnumerable<User>>> Get(
             [FromQuery] string userName,
             string name,

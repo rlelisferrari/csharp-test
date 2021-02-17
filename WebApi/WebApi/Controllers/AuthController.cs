@@ -15,13 +15,18 @@ namespace WebApi.Controllers
     {
         private readonly UserService userService;
         private readonly IConfiguration configuration;
-
+        
         public AuthController(IConfiguration configuration, UserService userService)
         {
             this.configuration = configuration;
             this.userService = userService;
         }
 
+        /// <summary>
+        /// Login user: receive username and password
+        /// </summary>
+        /// <response code="200">return token JWT</response>
+        /// <response code="500">Invalid Username or password</response>
         [HttpPost("singin")]
         public async Task<IActionResult> Singin(string userName, string password)
         {
@@ -30,6 +35,11 @@ namespace WebApi.Controllers
             return Ok(token);
         }
 
+        /// <summary>
+        /// register a new user
+        /// </summary>
+        /// <response code="200">User successfully registered</response>
+        /// <response code="500">Invalid parameters</response>
         [HttpPost("singup")]
         public async Task<IActionResult> Singup([FromBody] User user)
         {
