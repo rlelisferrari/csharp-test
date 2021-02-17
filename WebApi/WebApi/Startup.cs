@@ -78,7 +78,7 @@ namespace WebApi
             services.AddSwaggerGen(
                 c =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo {Title = "API Model DDD", Version = "v1"});
+                    c.SwaggerDoc("v1", new OpenApiInfo {Title = "API C# Test", Version = "v1"});
 
                     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
@@ -117,7 +117,7 @@ namespace WebApi
 
             app.UseSwagger();
 
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API Model DDD"); });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "API C# Test"); });
 
             app.UseHttpsRedirection();
 
