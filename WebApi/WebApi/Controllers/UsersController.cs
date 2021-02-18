@@ -21,8 +21,10 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        ///     returns registered products
+        /// returns registered users 
         /// </summary>
+        /// <response code="200">returns registered users</response>
+        /// <response code="401">Unauthorized</response>
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(List<User>), 200)]
