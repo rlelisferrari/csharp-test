@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
@@ -24,14 +25,14 @@ namespace DOMAIN.Services
             DateTime initialDateTime,
             DateTime finalDateTime)
         {
-            return await this.userRepository.FindAllAsync(
+            return (await this.userRepository.FindAllAsync(
                 item => (userName == null || item.UserName == userName)
                         && (name == null || item.Name.Contains(name))
                         && (email == null || item.Email == email)
                         && (initialDateTime == DateTime.MinValue
                             || finalDateTime == DateTime.MinValue
                             || initialDateTime <= item.RegistrationDate
-                            && item.RegistrationDate <= finalDateTime));
+                            && item.RegistrationDate <= finalDateTime))).OrderBy(item => item.Name);
         }
 
         public async Task<User> FindUser(string userName, string password)

@@ -21,7 +21,7 @@ namespace WebApi.Controllers
         }
 
         /// <summary>
-        /// return list of users
+        ///     returns registered products
         /// </summary>
         /// <returns></returns>
         [HttpGet]

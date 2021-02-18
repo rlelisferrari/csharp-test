@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using DOMAIN.Interfaces.Repositories;
 using DOMAIN.Models;
@@ -23,13 +24,13 @@ namespace DOMAIN.Services
             DateTime initial,
             DateTime final)
         {
-            return await this.productRepository.FindAllAsync(
+            return (await this.productRepository.FindAllAsync(
                 item => (name == null || item.Name.Contains(name))
                         && (description == null || item.Description.Contains(description))
                         && (initial == DateTime.MinValue
                             || final == DateTime.MinValue
                             || initial <= item.CreationDate
-                            && item.CreationDate <= final));
+                            && item.CreationDate <= final))).OrderBy(item => item.Name);
         }
 
         public async Task Add(Product product)
